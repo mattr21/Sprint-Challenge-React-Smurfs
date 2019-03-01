@@ -7,7 +7,7 @@ import Smurfs from './components/Smurfs';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = { 
       smurfs: [],
     };
   }
