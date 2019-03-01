@@ -12,6 +12,7 @@ class App extends Component {
     super();
     this.state = { 
       smurfs: [],
+      activeSmurf: null,
     }
   }
 
@@ -58,13 +59,38 @@ class App extends Component {
       });
   };
 
+
+  updateSmurf = (e, smurf) => {
+    e.preventDefault();
+    axios
+      .put(`http://localhost:3333/smurfs/${smurf.id}`, smurf)
+      .then(res => {
+        this.setState({
+          activeSmurf: null, 
+          smurfs: res.data
+        });
+        this.props.history.push("/");
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  setUpdateForm = (e, smurf) => {
+    e.preventDefault();
+    this.setState({
+      activeSmurf: smurf
+    });
+    this.props.history.push("/smurf-form");
+  };
+
   render() {
     return (
       <div className="App">
         <NavLink to="/"><button>Home</button></NavLink>
         <NavLink to="/smurf-form"><button>Add Smurf</button></NavLink>
-        <Route exact path="/" render={ props => <Smurfs {...this.state} {...props} deleteSmurf={this.deleteSmurf} /> } />
-        <Route path="/smurf-form" render={ props => <SmurfForm {...props} addSmurf={this.addSmurf} /> } />
+        <Route exact path="/" render={ props => <Smurfs {...this.state} {...props} deleteSmurf={this.deleteSmurf} setUpdateForm={this.setUpdateForm} /> } />
+        <Route path="/smurf-form" render={ props => <SmurfForm {...props} addSmurf={this.addSmurf} updateSmurf={this.updateSmurf} activeSmurf={this.state.activeSmurf} /> } />
       </div>
     );
   }

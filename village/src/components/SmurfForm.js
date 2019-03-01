@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class SmurfForm extends Component {
   state = {
-    smurf: {
+    smurf: this.props.activeSmurf || {
         name: '',
         age: '',
         height: ''
@@ -25,12 +25,12 @@ changeHandler = e => {
 };
 
 handleSubmit = e => {
-  // if (this.props.activeFriend) {
-  //   this.props.updateFriend(e, this.state.friend);
-  // } 
-  // else {
+  if (this.props.activeSmurf) {
+    this.props.updateSmurf(e, this.state.smurf);
+  } 
+  else {
     this.props.addSmurf(e, this.state.smurf);
-  // }
+  }
   this.setState({
     smurf: {
       name: '',
