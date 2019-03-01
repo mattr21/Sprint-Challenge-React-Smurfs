@@ -22,7 +22,8 @@ class App extends Component {
     axios
       .get('http://localhost:3333/smurfs')
       .then(res => {
-        console.log(res)
+        // console.log(res)
+        this.setState({ smurfs: res.data })
       })
       .catch(err => {
         console.log(err)
@@ -30,11 +31,12 @@ class App extends Component {
   }
 
   render() {
+    // console.log(props, "in App")
     return (
       <div className="App">
         <NavLink to="/"><button>Home</button></NavLink>
         <NavLink to="/smurf-form"><button>Add Smurf</button></NavLink>
-        <Route exact path="/" render={ props => <Smurfs smurfs={this.state.smurfs} /> } />
+        <Route exact path="/" render={ props => <Smurfs smurfs={this.state.smurfs} {...this.state} {...props} /> } />
         <Route path="/smurf-form" render={ props => <SmurfForm /> } />
       </div>
     );
