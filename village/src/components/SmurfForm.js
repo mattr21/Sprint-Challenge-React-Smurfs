@@ -1,53 +1,69 @@
 import React, { Component } from 'react';
 
 class SmurfForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      age: '',
-      height: ''
-    };
+  state = {
+    smurf: this.props.activeSmurf || {
+        name: '',
+        age: '',
+        height: ''
+    }
+}
+  
+changeHandler = e => {
+  e.persist();
+  let value = e.target.value;
+  if (e.target.name === 'age') {
+      value = parseInt(value, 10);
   }
 
-  addSmurf = event => {
-    event.preventDefault();
-    // add code to create the smurf using the api
+  this.setState(prevState => ({
+    smurf: {
+        ...prevState.smurf,
+        [e.target.name]: value
+    }
+  }));  
+};
 
-    this.setState({
+handleSubmit = e => {
+  if (this.props.activeSmurf) {
+    this.props.updateSmurf(e, this.state.smurf);
+  } 
+  else {
+    this.props.addSmurf(e, this.state.smurf);
+  }
+  this.setState({
+    smurf: {
       name: '',
       age: '',
-      height: ''
-    });
-  }
+      height: '',
+    }
+  });
+};
 
-  handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
 
   render() {
     return (
       <div className="SmurfForm">
-        <form onSubmit={this.addSmurf}>
+        <form onSubmit={this.handleSubmit}>
           <input
-            onChange={this.handleInputChange}
+            onChange={this.changeHandler}
             placeholder="name"
-            value={this.state.name}
+            value={this.state.smurf.name}
             name="name"
           />
           <input
-            onChange={this.handleInputChange}
+            onChange={this.changeHandler}
             placeholder="age"
-            value={this.state.age}
+            value={this.state.smurf.age}
             name="age"
           />
           <input
-            onChange={this.handleInputChange}
+            onChange={this.changeHandler}
             placeholder="height"
-            value={this.state.height}
+            value={this.state.smurf.height}
             name="height"
           />
-          <button type="submit">Add to the village</button>
+          <button>Add to the village</button>
         </form>
       </div>
     );
